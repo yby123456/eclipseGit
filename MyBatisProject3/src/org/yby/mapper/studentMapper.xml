@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.yby.mapper.StudentMapper">
+	<select id="queryStudentByStunoWithConverter" parameterType="int" resultMap="studentResult">
+		select * from student where stuno = #{stuNo}
+	</select>
+	
+	
+	<resultMap type="student" id="studentResult">
+		 <id property="stuNo" column="stuno"/>
+		 <result property="name" column="name"/>
+		 <result property="stuAge" column="stuage"/>
+		 <result property="graName" column="graname"/>
+		 <result property="stuSex" column="stusex" javaType="boolean" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	
+	<select id="queryStudentByStuno" parameterType="int" resultType="student">
+		select * from student where stuno = #{stuNo}
+	</select>
+	
+	<select id="queryStudentByNoWithOTO" parameterType="int" resultType="StudentBusiness">
+		select s.*,c.* from student s inner join studentcard c on s.cardid = c.cardid
+		where s.stuno = #{stuno}
+	</select>
+	
+	<select id="queryStudentByStunameandstuage" parameterType="student" resultType="student">
+		select stuno,name,stuage from student
+	<where>
+		<if test="name !=null and name!=''">
+			and name = #{name}
+		</if>
+		<if test="stuAge !=null and stuAge!=0">
+			and stuage = #{stuAge}
+		</if>
+	</where>
+	</select>
+	
+	<select id="queryStudentsWithStunosInGrade" parameterType="grade" resultType="student">
+		select * from student 
+	<where>
+		<if test="stuNos !=null and stuNos.size>0">
+		<foreach collection="stuNos" open=" and stuno in(" close=")" item="stuNo" separator=",">
+			#{stuNo}
+		</foreach>
+		</if>
+	</where>
+	</select>
+	
+	<!-- 
+	<select id="queryStudentByAddress" parameterType="address" resultType="student">
+		select * from student where homeAddress = #{homeAddress} or schoolAddress = '${schoolAddress}'
+	</select>
+	 -->
+	 
+	<select id="queryStudentByAddress" parameterType="student" resultType="student">
+		select * from student where homeAddress = #{address.homeAddress} or schoolAddress = '${address.schoolAddress}'
+	</select>
+	
+	 
+	<select id="queryStudentByStuageOrStuNameWithHashMap" parameterType="HashMap" resultType="student">
+		select * from student where stuAge = #{stuAge} or name = '${name}'
+	</select>
+	
+	
+	<insert id="insertStudent" parameterType="student">
+		insert into student(stuno,name,stuAge,graName,stuSex) values(#{stuNo},#{name},#{stuAge},#{graName},#{stuSex})
+	</insert>
+	
+	
+	<insert id="insertStudentWithConverter" parameterType="student">
+		insert into student(stuno,name,stuAge,graName,stuSex) values(#{stuNo},#{name},#{stuAge},#{graName},#{stuSex,javaType=boolean,jdbcType=INTEGER})
+	</insert>
+	
+	<delete id="deleteStudentByStuno" parameterType="int">
+		delete from student where stuno = #{stuNo};
+	</delete>
+	
+	<update id="updateStudent" parameterType="student">
+		update student set name=#{name},stuAge=#{stuAge},graName=#{graName}  where stuno=#{stuNo} 
+	</update>
+	
+	<select id="queryAllStudent"  resultType="student">
+		select * from student 
+	</select>
+	
+	<!-- 通过调用存储过程，实现查询 statementType="CALLABLE" 
+		存储过程输入参数，在mybatis中通常会用Map传递（hashMap）
+	-->
+	<select id="queryCountByGranameWithProcedure" statementType="CALLABLE"  parameterType="HashMap">
+		{
+			CALL queryCountByGradeWithProcedure(
+			#{gName,jdbcType=VARCHAR,mode=IN},
+			#{scount,jdbcType=INTEGER,mode=OUT}
+			)
+		
+		}
+	</select>
+	<delete id="deleteStudentByStunoWithProcedure" statementType="CALLABLE" parameterType="HashMap">
+		{
+			CALL deleteStudentByStunoWithProcedure1(
+			#{sno,jdbcType=INTEGER,mode=IN}
+			)
+		}
+	</delete>
+</mapper>
