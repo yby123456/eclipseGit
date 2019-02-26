@@ -12,6 +12,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.yby.entity.Student;
 
+
+//diyici
 public class Test {
 	
 	public static void queryStudent() throws IOException {
