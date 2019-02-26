@@ -15,7 +15,7 @@ import org.yby.entity.Student;
 
 //diyici
 //ciyidi
-//12345
+//12345+6
 public class Test {
 	
 	public static void queryStudent() throws IOException {
