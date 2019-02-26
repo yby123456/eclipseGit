@@ -15,7 +15,7 @@ import org.yby.entity.Student;
 
 //diyici
 //ciyidi
-//123
+//12345
 public class Test {
 	
 	public static void queryStudent() throws IOException {
@@ -46,7 +46,7 @@ public class Test {
 		Student student = new Student(4,"ww",25,"g1"); 
 		int count = session.insert(statement, student);
 		session.commit();
-		System.out.println("增加"+count+"个学生");
+		System.out.println("澧炲姞"+count+"涓鐢�");
 		session.close();
 
 	}
@@ -57,7 +57,7 @@ public class Test {
 		String statement = "org.yby.entity.studentMapper."+"deleteStudentByStuno";
 		int count = session.delete(statement,2);
 		session.commit();
-		System.out.println("删除"+count+"个学生");
+		System.out.println("鍒犻櫎"+count+"涓鐢�");
 		session.close();
 
 	}
@@ -73,7 +73,7 @@ public class Test {
 		student.setGraName("h4");
 		int count = session.update(statement,student);
 		session.commit();
-		System.out.println("更改"+count+"个学生");
+		System.out.println("鏇存敼"+count+"涓鐢�");
 		session.close();
 
 	}
